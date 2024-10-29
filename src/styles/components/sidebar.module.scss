@@ -1,0 +1,78 @@
+@import "../abstracts/vars";
+@import "../abstracts/mixins";
+
+.transfers {
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: flex-start;
+    width: 232px;
+    height: 252px;
+    background-color: $blockBackground;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+
+    legend {
+        padding: 20px 20px 10px 20px;
+        line-height: 12px;
+        text-transform: uppercase;
+    }
+
+    @include mobile() {
+        width: clamp(19.375rem, 11.771rem + 38.02vw, 31.375rem);
+        margin: 0 auto 20px;
+    }
+}
+
+.formPart {
+    display: flex;
+    width: 100%;
+    padding: 10px 20px;
+    column-gap: 10px;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+        background-color: $hoverEffect;
+    }
+
+    label {
+        cursor: pointer;
+    }
+} 
+
+.customCheckbox {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    
+
+    &+label {
+        display: inline-flex;
+        align-items: center;
+        user-select: none;
+    }
+
+    &+label::before {
+        content: '';
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        border: 1px solid $checkboxBorder;
+        border-radius: 0.25em;
+        margin-right: 10px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 50% 50%;
+    }
+
+    &:checked+label::before {
+        border-color: $activeBtns;
+        background-color: $blockBackground;
+        background-image: url("../../assets/shape.svg")
+    }
+}
+
+

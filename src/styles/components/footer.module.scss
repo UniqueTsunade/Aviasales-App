@@ -1,0 +1,21 @@
+@import "../abstracts/vars";
+@import "../abstracts/mixins";
+
+.showMore {
+    display: block;
+    width: 502px;
+    background-color: $activeBtns;
+    padding: 15px 20px;
+    border-radius: 5px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: $lightTextColor;
+    cursor: pointer;
+
+    @include mobile() {
+        margin: 0 auto;
+        width: clamp(19.375rem, 11.771rem + 38.02vw, 31.375rem);
+    }
+}

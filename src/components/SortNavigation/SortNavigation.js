@@ -1,43 +1,31 @@
-
+import { useSelector, useDispatch } from "react-redux";
 import styles from "../../styles/components/sort-navigation.module.scss";
 
+import { changeOption } from "../../redux/sort/slice";
+import { RadioButton } from "./RadioButton";
+import sortOptions from "../../data/sortOptions";
+
 const SortNavigation = () => {
+  const option = useSelector((state) => state.sortSlice.option);
+  const dispatch = useDispatch();
+
+  const selectOption = (e) => {
+    dispatch(changeOption(e.target.value));
+  };
+
   return (
     <div>
       <form className={styles.sortForm}>
-        <div className={styles.sortOptionContainer}>
-          <input
-            type="radio"
-            name="sortOption"
-            className={styles.sortOption}
-            id="cheap"
+        {sortOptions.map(({ value, label }) => (
+          <RadioButton
+            key={value}
+            id={value}
+            value={value}
+            label={label}
+            checked={option === value}
+            selectOption={selectOption}
           />
-          <label className={styles.sortOptionTitle} htmlFor="cheap">
-            Самый дешевый
-          </label>
-        </div>
-        <div className={styles.sortOptionContainer}>
-          <input
-            type="radio"
-            name="sortOption"
-            className={styles.sortOption}
-            id="fast"
-          />
-          <label className={styles.sortOptionTitle} htmlFor="fast">
-            Самый быстрый
-          </label>
-        </div>
-        <div className={styles.sortOptionContainer}>
-          <input
-            type="radio"
-            name="sortOption"
-            className={styles.sortOption}
-            id="optimal"
-          />
-          <label className={styles.sortOptionTitle} htmlFor="optimal">
-            Оптимальный
-          </label>
-        </div>
+        ))}
       </form>
     </div>
   );

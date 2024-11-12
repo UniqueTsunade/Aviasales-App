@@ -1,55 +1,37 @@
 import styles from "../../styles/components/sidebar.module.scss";
+import filterOptions from "../../data/filterOptions";
+import { CheckboxButton } from "./CheckboxButton";
+import { useDispatch, useSelector } from "react-redux";
+import { addTransfers, initializeTransfers } from "../../redux/filter/slice";
+import { useEffect } from "react";
 
 const Sidebar = () => {
+  const transfers = useSelector((state) => state.filterSlice.transfers);
+  const dispatch = useDispatch();
+
+   useEffect(() => {
+    dispatch(initializeTransfers(filterOptions));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const pickTransfers = (value) => {
+    dispatch(addTransfers(value));
+  };
+
   return (
     <div>
       <form className={styles.transfers}>
         <legend>Количество пересадок</legend>
-        <div className={styles.formPart}> 
-          <input
-            className={styles.customCheckbox}
-            type="checkbox"
-            name="transfers"
-            id="all"
+        {transfers.map(({ value, checked, label }) => (
+          <CheckboxButton
+            id={value}
+            key={value}
+            label={label}
+            pickTransfers={() => pickTransfers(value)}
+            value={value}
+            checked={checked}
           />
-          <label htmlFor="all">Все</label>
-        </div>
-        <div className={styles.formPart}> 
-          <input
-            className={styles.customCheckbox}
-            type="checkbox"
-            name="transfers"
-            id="noTransfers"
-          />
-          <label htmlFor="noTransfers">Без пересадок</label>
-        </div>
-        <div className={styles.formPart}>
-          <input
-            className={styles.customCheckbox}
-            type="checkbox"
-            name="transfers"
-            id="oneTransfers"
-          />
-          <label htmlFor="oneTransfers">1 пересадка</label>
-        </div>
-        <div className={styles.formPart}>
-          <input
-            className={styles.customCheckbox}
-            type="checkbox"
-            name="transfers"
-            id="twoTransfers"
-          />
-          <label htmlFor="twoTransfers">2 пересадки</label>
-        </div>
-        <div className={styles.formPart}>
-          <input
-            className={styles.customCheckbox}
-            type="checkbox"
-            name="transfers"
-            id="threeTransfers"
-          />
-          <label htmlFor="threeTransfers">3 пересадки</label>
-        </div>
+        ))}
       </form>
     </div>
   );

@@ -5,12 +5,17 @@ import axios from "axios";
 export const fetchSearchId = createAsyncThunk(
     'tickets/fetchSearchIdStatus',
     async () => {
-        const response = await axios.get(`https://aviasales-test-api.kata.academy/search`);
-        const { searchId } = response.data;
-        console.log(typeof searchId);
-        return searchId;
+        try {
+            const response = await axios.get(`https://aviasales-test-api.kata.academy/search`);
+            const { searchId } = response.data;
+            return searchId;
+        } catch (error) {
+            console.error('Error fetching searchId:', error);
+            // You can throw an error or return a specific value to handle it in your component
+            throw new Error(error.response ? error.response.data : error.message);
+        }
     }
-)
+);
 
 export const fetchTickets = createAsyncThunk(
     'tickets/fetchTicketsByIdStatus',

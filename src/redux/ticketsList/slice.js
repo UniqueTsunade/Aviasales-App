@@ -2,8 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchSearchId, fetchTickets } from "./asyncActions";
 import {
   handleFulfilled,
-  handlePending,
+  handlePendingID,
   handleRejected,
+  handleRejectedTickets,
+  handlePendingTickets
 } from "../../utils/handleStatus";
 
 const initialState = {
@@ -13,6 +15,7 @@ const initialState = {
   loadedTickets: [], 
   stop: false,
   startSlice: 0, 
+  error: null,
 };
 
 export const ticketsSlice = createSlice({
@@ -30,13 +33,13 @@ export const ticketsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSearchId.pending, handlePending)
+      .addCase(fetchSearchId.pending, handlePendingID)
       .addCase(fetchSearchId.fulfilled, (state, action) => {
         state.searchId = action.payload;
         handleFulfilled(state, action);
       })
       .addCase(fetchSearchId.rejected, handleRejected)
-      .addCase(fetchTickets.pending, handlePending)
+      .addCase(fetchTickets.pending, handlePendingTickets)
       .addCase(fetchTickets.fulfilled, (state, action) => {
         state.loadedTickets.push(...action.payload.tickets); // Save downloaded tickets
         state.stop = action.payload.stop; // Update the stop flag
@@ -46,8 +49,9 @@ export const ticketsSlice = createSlice({
           state.tickets.push(...initialTickets); // First 5 tickets
           state.startSlice = 5;
         }
+        handleFulfilled(state, action);
       })
-      .addCase(fetchTickets.rejected, handleRejected);
+      .addCase(fetchTickets.rejected, handleRejectedTickets);
   },
 });
 

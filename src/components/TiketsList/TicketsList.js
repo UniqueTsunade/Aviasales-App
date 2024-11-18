@@ -1,4 +1,5 @@
 import Ticket from "../Ticket/Ticket";
+
 import {
   fetchSearchId,
   fetchTickets,
@@ -41,6 +42,8 @@ const TiketsList = () => {
 }, []);
 
 
+
+
   console.log(`tickets`, tickets);
   console.log(`loadedTickets`, loadedTickets)
 
@@ -49,9 +52,9 @@ const TiketsList = () => {
       {error ? (
         <div className={styles.error}>Failed to load tickets. <br/> Please try again.</div>
       ) : (
-        tickets.map(({ price, segments, carrier }, index) => (
+        tickets.map(({ id, price, segments, carrier }) => (
         <Ticket
-          key={`${carrier}-${price}-${index}`}
+          key={id}
           price={price}
           segments={segments}
           carrier={carrier}

@@ -5,17 +5,21 @@ import {
   handlePendingID,
   handleRejected,
   handleRejectedTickets,
-  handlePendingTickets
+  handlePendingTickets,
 } from "../../utils/handleStatus";
+import { v4 as uuidv4 } from "uuid";
+
+import { sortTickets } from "../../utils/sortTickets";
 
 const initialState = {
   searchId: "",
   status: "idle",
-  tickets: [], 
-  loadedTickets: [], 
+  tickets: [],
+  loadedTickets: [],
   stop: false,
-  startSlice: 0, 
+  startSlice: 5,
   error: null,
+  activeSort: null, 
 };
 
 export const ticketsSlice = createSlice({
@@ -23,12 +27,32 @@ export const ticketsSlice = createSlice({
   initialState,
   reducers: {
     showMoreTickets: (state) => {
-      const nextTickets = state.loadedTickets.slice(
-        state.startSlice,
-        state.startSlice + 5
-      ); // Take this portion of tickets (5 pieces)
-      state.tickets.push(...nextTickets); // Add them to the displayed ones
-      state.startSlice += 5; // Increasing the index
+      if (state.stop) return;
+      // If sorting is active, sort the tickets, otherwise we use the original array
+      const currentSortedTickets = state.activeSort
+        ? sortTickets(state.loadedTickets, state.activeSort)
+        : state.loadedTickets;
+
+      if (state.startSlice < state.loadedTickets.length) {
+        // Take the next portion of tickets from the sorted array
+        const nextTickets = currentSortedTickets.slice(
+          state.startSlice,
+          Math.min(state.startSlice + 5, state.loadedTickets.length)
+        );
+        // Update the displayed tickets and index for the next portion
+        state.tickets = [...state.tickets, ...nextTickets];
+        state.startSlice += 5;
+      } 
+    },
+    setActiveSort: (state, action) => {
+      const sortType = action.payload;
+      state.activeSort = sortType;
+
+      // Sorting unique tickets
+      const sortedTickets = sortTickets(state.loadedTickets, sortType);
+
+      // Limit the number of tickets displayed to the current startSlice value
+      state.tickets = sortedTickets.slice(0, state.startSlice);
     },
   },
   extraReducers: (builder) => {
@@ -41,21 +65,37 @@ export const ticketsSlice = createSlice({
       .addCase(fetchSearchId.rejected, handleRejected)
       .addCase(fetchTickets.pending, handlePendingTickets)
       .addCase(fetchTickets.fulfilled, (state, action) => {
-        state.loadedTickets.push(...action.payload.tickets); // Save downloaded tickets
-        state.stop = action.payload.stop; // Update the stop flag
-        // If tickets are not yet displayed, add the first portion
-        if (state.tickets.length === 0) {
-          const initialTickets = state.loadedTickets.slice(0, 5);
-          state.tickets.push(...initialTickets); // First 5 tickets
-          state.startSlice = 5;
+        const ticketsWithId = action.payload.tickets.map((ticket) => ({
+          ...ticket,
+          id: uuidv4(), // Generating a unique ID for each ticket
+        }));
+
+        state.loadedTickets.push(...ticketsWithId);
+
+        if (state.activeSort) {
+          const sortedTickets = sortTickets(
+            state.loadedTickets,
+            state.activeSort
+          );
+          state.tickets = sortedTickets.slice(0, state.startSlice);
+        } else {
+          // If sorting is not active, just take the first 5
+          if (state.tickets.length === 0) {
+            state.tickets = state.loadedTickets.slice(0, 5);
+          }
         }
+        state.stop = action.payload.stop;
         handleFulfilled(state, action);
       })
       .addCase(fetchTickets.rejected, handleRejectedTickets);
   },
 });
 
-export const { trackBtnClick, setDisplayedTickets, showMoreTickets } =
-  ticketsSlice.actions;
+export const {
+  showMoreTickets,
+  getCheapestTicket,
+  getFastestTicket,
+  setActiveSort,
+} = ticketsSlice.actions;
 
 export default ticketsSlice.reducer;

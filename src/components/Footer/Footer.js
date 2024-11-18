@@ -19,7 +19,7 @@ const Footer = () => {
     while (attempts < retries) {
         try {
             await dispatch(fetchTickets(searchId)).unwrap();
-            return; // Успех
+            return; 
         } catch (error) {
             attempts++;
             if (attempts >= retries) {

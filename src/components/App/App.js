@@ -10,6 +10,7 @@ import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar";
 
 const App = () => {
+
   return (
     <div className={styles.app}>
       <div>

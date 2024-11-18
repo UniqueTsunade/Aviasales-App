@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    option: "optimal",
+    option: null,
 }
 
 export const sortSlice = createSlice({

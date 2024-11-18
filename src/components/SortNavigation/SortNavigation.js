@@ -5,13 +5,14 @@ import { changeOption } from "../../redux/sort/slice";
 import { RadioButton } from "./RadioButton";
 import sortOptions from "../../data/sortOptions";
 
-const SortNavigation = () => {
+const SortNavigation = ({getCheapestTicket}) => {
   const option = useSelector((state) => state.sortSlice.option);
   const dispatch = useDispatch();
 
   const selectOption = (e) => {
     dispatch(changeOption(e.target.value));
   };
+
 
   return (
     <div>
@@ -24,6 +25,7 @@ const SortNavigation = () => {
             label={label}
             checked={option === value}
             selectOption={selectOption}
+            getCheapestTicket={getCheapestTicket}
           />
         ))}
       </form>

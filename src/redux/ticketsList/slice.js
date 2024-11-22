@@ -46,8 +46,6 @@ export const ticketsSlice = createSlice({
       } else {
         state.filteredTicketsLoaded = false;
       }
-
-      console.log("nextStartSlice", nextStartSlice);
     },
     setActiveSort: (state, action) => {
       state.activeSort = action.payload;

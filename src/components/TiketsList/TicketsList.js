@@ -34,14 +34,9 @@ const TiketsList = () => {
     };
     fetchInitialData();
     return () => {
-      console.log("TiketsList unmounted");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    console.log("Tickets updated:", tickets);
-  }, [tickets]);
 
   const skeleton = [...new Array(5)].map((_, i) => <Skeleton key={i} /> );
   const ticket = tickets.map(({ id, price, segments, carrier }) => (

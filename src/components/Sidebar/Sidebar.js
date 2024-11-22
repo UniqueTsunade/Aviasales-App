@@ -4,15 +4,25 @@ import { CheckboxButton } from "./CheckboxButton";
 import { useDispatch, useSelector } from "react-redux";
 import { addTransfers, initializeTransfers } from "../../redux/filter/slice";
 import { useEffect } from "react";
+import { setFilters } from "../../redux/ticketsList/slice";
 
 const Sidebar = () => {
-  const transfers = useSelector((state) => state.filterSlice.transfers);
+  const { transfers } = useSelector((state) => state.filterSlice);
   const dispatch = useDispatch();
 
    useEffect(() => {
     dispatch(initializeTransfers(filterOptions));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+   // Monitoring transfers changes and updating activeFilters
+   useEffect(() => {
+    const activeFilters = transfers
+      .filter((transfer) => transfer.checked)
+      .map((transfer) => transfer.value);
+
+    dispatch(setFilters(activeFilters));
+  }, [transfers, dispatch]);
 
   const pickTransfers = (value) => {
     dispatch(addTransfers(value));

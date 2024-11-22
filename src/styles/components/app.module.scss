@@ -1,6 +1,7 @@
 @import "../abstracts/mixins";
 
 .app {
+    position: relative;
     padding: 50px 103px; 
     overflow: hidden;
 
@@ -35,5 +36,15 @@
     @include mobile() {
         display: block;
     }
-    
+}
+
+
+.scrollToTop {
+    position: fixed;
+    display: block;
+    bottom: 70px;
+    right: 40px;
+    width: 40px;
+    background: transparent;
+    cursor: pointer;
 }

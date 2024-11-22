@@ -12,7 +12,7 @@ export const filterSlice = createSlice({
       state.transfers = action.payload.map(({ value, label }) => ({
         value,
         label,
-        checked: false,
+        checked: true,
       }));
     },
     addTransfers: (state, action) => {

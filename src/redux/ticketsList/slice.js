@@ -9,7 +9,8 @@ import {
 } from "../../utils/handleStatus";
 import { v4 as uuidv4 } from "uuid";
 
-import { sortTickets } from "../../utils/sortTickets";
+import { updateDisplayedTickets } from "../../utils/updateDisplayedTickets";
+
 
 const initialState = {
   searchId: "",
@@ -19,7 +20,10 @@ const initialState = {
   stop: false,
   startSlice: 5,
   error: null,
-  activeSort: null, 
+  activeSort: null,
+  activeFilters: [],
+  filteredTicketsLoaded: false,
+  isLoad: false, 
 };
 
 export const ticketsSlice = createSlice({
@@ -28,31 +32,30 @@ export const ticketsSlice = createSlice({
   reducers: {
     showMoreTickets: (state) => {
       if (state.stop) return;
-      // If sorting is active, sort the tickets, otherwise we use the original array
-      const currentSortedTickets = state.activeSort
-        ? sortTickets(state.loadedTickets, state.activeSort)
-        : state.loadedTickets;
 
-      if (state.startSlice < state.loadedTickets.length) {
-        // Take the next portion of tickets from the sorted array
-        const nextTickets = currentSortedTickets.slice(
-          state.startSlice,
-          Math.min(state.startSlice + 5, state.loadedTickets.length)
-        );
-        // Update the displayed tickets and index for the next portion
-        state.tickets = [...state.tickets, ...nextTickets];
-        state.startSlice += 5;
-      } 
+      // Increase the index for the next portion
+      const nextStartSlice = state.startSlice + 5;
+
+      // If the index does not exceed the total number of tickets, update the state
+      if (nextStartSlice <= state.loadedTickets.length) {
+        state.startSlice = nextStartSlice;
+        updateDisplayedTickets(state);
+      }
+      if (nextStartSlice > state.tickets.length) {
+        state.filteredTicketsLoaded = true;
+      } else {
+        state.filteredTicketsLoaded = false;
+      }
+
+      console.log("nextStartSlice", nextStartSlice);
     },
     setActiveSort: (state, action) => {
-      const sortType = action.payload;
-      state.activeSort = sortType;
-
-      // Sorting unique tickets
-      const sortedTickets = sortTickets(state.loadedTickets, sortType);
-
-      // Limit the number of tickets displayed to the current startSlice value
-      state.tickets = sortedTickets.slice(0, state.startSlice);
+      state.activeSort = action.payload;
+      updateDisplayedTickets(state);
+    },
+    setFilters: (state, action) => {
+      state.activeFilters = action.payload;
+      updateDisplayedTickets(state);
     },
   },
   extraReducers: (builder) => {
@@ -72,12 +75,8 @@ export const ticketsSlice = createSlice({
 
         state.loadedTickets.push(...ticketsWithId);
 
-        if (state.activeSort) {
-          const sortedTickets = sortTickets(
-            state.loadedTickets,
-            state.activeSort
-          );
-          state.tickets = sortedTickets.slice(0, state.startSlice);
+        if (state.activeSort || state.activeFilters.length > 0) {
+          updateDisplayedTickets(state);
         } else {
           // If sorting is not active, just take the first 5
           if (state.tickets.length === 0) {
@@ -85,17 +84,13 @@ export const ticketsSlice = createSlice({
           }
         }
         state.stop = action.payload.stop;
+        state.isLoad = false;
         handleFulfilled(state, action);
       })
       .addCase(fetchTickets.rejected, handleRejectedTickets);
   },
 });
 
-export const {
-  showMoreTickets,
-  getCheapestTicket,
-  getFastestTicket,
-  setActiveSort,
-} = ticketsSlice.actions;
+export const { showMoreTickets, setActiveSort, setFilters } = ticketsSlice.actions;
 
 export default ticketsSlice.reducer;

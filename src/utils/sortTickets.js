@@ -10,21 +10,31 @@ const getFastestTicket = (tickets) => {
   return [...tickets].sort((a, b) => {
     const totalTimeA = calculateTotalTime(a.segments);
     const totalTimeB = calculateTotalTime(b.segments);
-    return totalTimeA - totalTimeB;
+    
+    // If the total time is the same, sort by the number of transfers
+    const stopsA = a.segments.length - 1; // Number of transfers
+    const stopsB = b.segments.length - 1;
+
+    // First we compare by time, then by the number of transfers
+    if (totalTimeA === totalTimeB) {
+      return stopsA - stopsB; // Fewer transfers is better
+    }
+
+    return totalTimeA - totalTimeB; // Sort by time
   });
 };
 
+
 const getOptimalTickets = (tickets) => {
-  return [...tickets].sort((a, b) => {
-    const totalTimeA = calculateTotalTime(a.segments);
-    const totalTimeB = calculateTotalTime(b.segments);
-
-    // Вычисляем соотношение цена/время
-    const ratioA = a.price / totalTimeA;
-    const ratioB = b.price / totalTimeB;
-
-    return ratioA - ratioB; // Сортируем по соотношению (меньше - лучше)
+  // Create an array with tickets and their price/time ratio
+  const ticketsWithRatios = tickets.map(ticket => {
+    const totalTime = calculateTotalTime(ticket.segments);
+    const ratio = ticket.price / totalTime; // Calculating the price/time ratio
+    return { ...ticket, ratio }; // Returning a new object with the added relation
   });
+
+  // Sort by ratio (less is better)
+  return ticketsWithRatios.sort((a, b) => a.ratio - b.ratio);
 };
 
 export const sortTickets = (tickets, sortType) => {
@@ -36,6 +46,6 @@ export const sortTickets = (tickets, sortType) => {
     case "optimal":
       return getOptimalTickets(tickets);
     default:
-      return tickets; // Если сортировка не задана, возвращаем исходный массив
+      return tickets; // If sorting is not specified, return the original array
   }
 };

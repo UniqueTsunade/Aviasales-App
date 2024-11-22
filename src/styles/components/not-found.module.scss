@@ -1,0 +1,21 @@
+@import "../abstracts/mixins";
+
+.banner {
+    width: 502px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 40px;
+    font-size: 15px;
+    line-height: 30px;
+
+    img {
+        width: 64px;
+    }
+
+    @include mobile() {
+        width: clamp(19.375rem, 11.771rem + 38.02vw, 31.375rem);
+        margin: 0 auto 20px;
+    }
+}

@@ -4,6 +4,7 @@ export const handlePendingID = (state) => {
 
 export const handlePendingTickets = (state) => {
   state.status = "loading";
+  state.isLoad = true;
   state.error = null;
 };
 
@@ -19,5 +20,6 @@ export const handleRejected = (state, action) => {
 export const handleRejectedTickets = (state, action) => {
   state.status = "error";
   state.error = 'Failed to load tickets.';
+  state.isLoad = false; // Сбросить isLoad
   console.error('Error fetching Tickets:', action.error);
 };

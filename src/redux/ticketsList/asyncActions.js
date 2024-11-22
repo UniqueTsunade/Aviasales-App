@@ -26,7 +26,6 @@ export const fetchTickets = createAsyncThunk(
                 throw new Error('Network response was not ok');
             }
             const { tickets, stop } = response.data;
-            console.log(tickets, stop);
             return { tickets, stop };
         } catch (error) {
             console.error('Error fetching tickets:', error);

@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FilterSliceState, Transfers } from "./types";
 
-const initialState = {
+const initialState: FilterSliceState = {
   transfers: [],
 };
 
@@ -8,20 +9,20 @@ export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    initializeTransfers: (state, action) => {
+    initializeTransfers: (state, action: PayloadAction<Omit<Transfers, "checked">[]>) => {
       state.transfers = action.payload.map(({ value, label }) => ({
         value,
         label,
         checked: true,
       }));
     },
-    addTransfers: (state, action) => {
+    addTransfers: (state, action: PayloadAction<string>) => {
       const transferValue = action.payload;
       const isAllTransfer = transferValue === "all";
       const allTransfer = state.transfers.find((item) => item.value === "all");
 
       if (isAllTransfer) {
-        const allChecked = allTransfer.checked;
+        const allChecked = allTransfer?.checked;
 
         // Set checked for all elements depending on the "all" state
         state.transfers.forEach((transfer) => {
@@ -43,7 +44,7 @@ export const filterSlice = createSlice({
           const test = state.transfers.filter(
             (transfer) => transfer.checked === false
           );
-          if (test.length === 1) {
+          if (test.length === 1 && allTransfer) {
             // If all transfers except "all" have checked set to true, then set true and "all"
             allTransfer.checked = true;
           }

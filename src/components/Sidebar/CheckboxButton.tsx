@@ -1,7 +1,15 @@
 import React from "react";
 import styles from "../../styles/components/sidebar.module.scss";
 
-export const CheckboxButton = ({ id, label, value, checked, pickTransfers }) => {
+type CheckboxButtonProps = {
+  id: string,
+  label: string, 
+  value: string, 
+  checked: boolean, 
+  pickTransfers: () => void
+}
+
+export const CheckboxButton: React.FC<CheckboxButtonProps> = ({ id, label, value, checked, pickTransfers }) => {
   
   return (
     <div className={styles.formPart}>

@@ -1,7 +1,9 @@
+import React  from "react";
 import styles from "../../styles/components/ticket-info.module.scss";
 import { getDepartureTime, getArrivalTime, getTotalTravelTime, getHeaderForCitiesWithTransfers } from "../../utils/helpers";
+import { SegmentsType as TicketInfoProps } from "../../redux/ticketsList/types";
 
-const TicketInfo = ({ origin, destination, date, duration, stops }) => {
+const TicketInfo: React.FC<TicketInfoProps> = ({ origin, destination, date, duration, stops }) => {
 
   const {departureTime} = getDepartureTime(date);
 

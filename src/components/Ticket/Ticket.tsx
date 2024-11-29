@@ -1,8 +1,20 @@
-import styles from "../../styles/components/ticket.module.scss";
-import TicketInfo from "../TicketInfo/TicketInfo";
-import { getPriceString } from "../../utils/helpers";
+import React from "react";
 
-const Ticket = ({ price, carrier, segments }) => {
+import styles from "../../styles/components/ticket.module.scss";
+
+import TicketInfo from "../TicketInfo/TicketInfo";
+
+import { getPriceString } from "../../utils/helpers";
+import { Ticket as TicketType } from "../../redux/ticketsList/types";
+
+type TicketProps = {
+  key: TicketType['id'];
+  price: TicketType['price'];
+  segments: TicketType['segments'];
+  carrier: TicketType['carrier']
+}
+
+const Ticket: React.FC<TicketProps> = ({ price, carrier, segments }) => {
   const carrierCode = carrier;
 
   return (

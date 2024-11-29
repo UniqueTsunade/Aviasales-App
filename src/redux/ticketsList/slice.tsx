@@ -1,20 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchSearchId, fetchTickets } from "./asyncActions";
-import {
-  handleFulfilled,
-  handlePendingID,
-  handleRejected,
-  handleRejectedTickets,
-  handlePendingTickets,
-} from "../../utils/handleStatus";
 import { v4 as uuidv4 } from "uuid";
 
 import { updateDisplayedTickets } from "../../utils/updateDisplayedTickets";
+import { TicketsSliceState, Status, Ticket } from "./types";
 
 
-const initialState = {
+const initialState:TicketsSliceState = {
   searchId: "",
-  status: "idle",
+  status: Status.IDLE,
   tickets: [],
   loadedTickets: [],
   stop: false,
@@ -58,14 +52,23 @@ export const ticketsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSearchId.pending, handlePendingID)
-      .addCase(fetchSearchId.fulfilled, (state, action) => {
-        state.searchId = action.payload;
-        handleFulfilled(state, action);
+      .addCase(fetchSearchId.pending, (state) => {
+        state.status = Status.LOADING;
       })
-      .addCase(fetchSearchId.rejected, handleRejected)
-      .addCase(fetchTickets.pending, handlePendingTickets)
-      .addCase(fetchTickets.fulfilled, (state, action) => {
+      .addCase(fetchSearchId.fulfilled, (state, action: PayloadAction<string>) => {
+        state.searchId = action.payload;
+        state.status = Status.SUCCESS;
+      })
+      .addCase(fetchSearchId.rejected, (state, action) => {
+        state.status = Status.ERROR;
+        state.error = action.error.message ? action.error.message : null;
+      })
+      .addCase(fetchTickets.pending, (state) => {
+        state.status = Status.LOADING;
+        state.isLoad = true;
+        state.error = null;
+      })
+      .addCase(fetchTickets.fulfilled, (state, action: PayloadAction<{tickets: Ticket[], stop: boolean}>) => {
         const ticketsWithId = action.payload.tickets.map((ticket) => ({
           ...ticket,
           id: uuidv4(), // Generating a unique ID for each ticket
@@ -83,9 +86,14 @@ export const ticketsSlice = createSlice({
         }
         state.stop = action.payload.stop;
         state.isLoad = false;
-        handleFulfilled(state, action);
+        state.status = Status.SUCCESS;
       })
-      .addCase(fetchTickets.rejected, handleRejectedTickets);
+      .addCase(fetchTickets.rejected, (state, action) => {
+        state.status = Status.ERROR;
+        state.error = 'Failed to load tickets.';
+        state.isLoad = false; // Reset isLoad
+        console.error('Error fetching Tickets:', action.error);
+      });
   },
 });
 

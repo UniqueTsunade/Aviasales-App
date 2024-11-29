@@ -1,7 +1,8 @@
 import { sortTickets } from "./sortTickets";
 import { filterTickets } from "./filterTickets";
+import { TicketsSliceState } from "../redux/ticketsList/types";
 
-export const updateDisplayedTickets = (state) => {
+export const updateDisplayedTickets = (state: TicketsSliceState) => {
     // Filter tickets based on active filters
     const filteredTickets = filterTickets(
       state.activeFilters,

@@ -1,18 +1,20 @@
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "../../styles/components/sort-navigation.module.scss";
 
 import { changeOption } from "../../redux/sort/slice";
 import { RadioButton } from "./RadioButton";
 import sortOptions from "../../data/sortOptions";
+import { RootState } from "../../redux/store";
+import { AppDispatch } from '../../redux/store';
 
-const SortNavigation = ({getCheapestTicket}) => {
-  const option = useSelector((state) => state.sortSlice.option);
-  const dispatch = useDispatch();
+const SortNavigation = () => {
+  const option = useSelector((state: RootState) => state.sortSlice.option);
+  const dispatch: AppDispatch = useDispatch();
 
-  const selectOption = (e) => {
+  const selectOption = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeOption(e.target.value));
   };
-
 
   return (
     <div>
@@ -25,7 +27,6 @@ const SortNavigation = ({getCheapestTicket}) => {
             label={label}
             checked={option === value}
             selectOption={selectOption}
-            getCheapestTicket={getCheapestTicket}
           />
         ))}
       </form>

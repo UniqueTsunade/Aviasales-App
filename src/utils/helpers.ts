@@ -1,4 +1,4 @@
-export const getDepartureTime = (date) => {
+export const getDepartureTime = (date: string) => {
   const fullDate = new Date(date);
   const hours = fullDate.getHours();
   const minutes = fullDate.getMinutes();
@@ -13,7 +13,7 @@ export const getDepartureTime = (date) => {
   };
 };
 
-export const getArrivalTime = (duration, date) => {
+export const getArrivalTime = (duration: number, date: string) => {
   const { hours: departureHours, minutes: departureMinutes } =
     getDepartureTime(date);
 
@@ -30,7 +30,7 @@ export const getArrivalTime = (duration, date) => {
   return arrivalTime;
 };
 
-export const getTotalTravelTime = (duration) => {
+export const getTotalTravelTime = (duration: number) => {
   const hours = Math.floor(duration / 60);
   const minutes = duration % 60;
 
@@ -41,7 +41,7 @@ export const getTotalTravelTime = (duration) => {
   return totalTravelTime;
 };
 
-export const getHeaderForCitiesWithTransfers = (stops) => {
+export const getHeaderForCitiesWithTransfers = (stops: string[]) => {
   const stopLength = stops.length;
   let header = "";
   if (stopLength === 0) {
@@ -56,7 +56,7 @@ export const getHeaderForCitiesWithTransfers = (stops) => {
   return header;
 };
 
-export const getPriceString = (price) => {
+export const getPriceString = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };
 

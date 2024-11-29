@@ -1,4 +1,6 @@
-const filterOptions  = [
+import { Transfers } from "../redux/filter/types";
+
+const filterOptions: Omit<Transfers, "checked">[] = [
     { value: "all", label: "Все" },
     { value: "noTransfers", label: "Без пересадок" },
     { value: "oneTransfers", label: "1 пересадка" },

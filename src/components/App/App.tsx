@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 import styles from "../../styles/components/app.module.scss";
 
@@ -7,17 +8,16 @@ import logo from "../../assets/logo.png";
 import up from "../../assets/up.png";
 
 import SortNavigation from "../SortNavigation";
-import TiketsList from "../TiketsList";
-import Footer from "../Footer/Footer";
+import TiketsList from "../TiketsList"
+import Footer from "../Footer";
 import Sidebar from "../Sidebar";
 import NotFound from "../NotFound";
 import Loader from "../Loader";
 
 const App = () => {
-  const activeFilters = useSelector(
-    (state) => state.ticketsSlice.activeFilters
-  );
-  const isLoad = useSelector((state) => state.ticketsSlice.isLoad);
+  
+  const activeFilters = useSelector((state: RootState) => state.ticketsSlice.activeFilters);
+  const isLoad = useSelector((state: RootState) => state.ticketsSlice.isLoad);
 
   const scrollToTop = () => {
     window.scrollTo({

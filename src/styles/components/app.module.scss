@@ -47,4 +47,8 @@
     width: 33px;
     background: transparent;
     cursor: pointer;
+
+    @include tablet() {
+        display: none;
+    }
 }

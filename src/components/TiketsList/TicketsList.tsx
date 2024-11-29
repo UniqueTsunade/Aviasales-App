@@ -13,13 +13,12 @@ import useFetchTicketsData from "../../hooks/useFetchTicketsData";
 
 const TiketsList = () => {
 
-  const { tickets, error, isLoad, loadedTickets } = useSelector((state: RootState) => state.ticketsSlice);
+  const { tickets, error, isLoad } = useSelector((state: RootState) => state.ticketsSlice);
 
   useFetchInitialData();
   useFetchTicketsData();
 
-  console.log("tickets", tickets);
-  console.log("loadedTickets", loadedTickets);
+
 
 
   const skeleton = [...new Array(5)].map((_, i) => <Skeleton key={i} /> );

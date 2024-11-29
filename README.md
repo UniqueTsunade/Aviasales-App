@@ -1,1 +1,1 @@
-Link to working application: https://aviasales-app-three-delta.vercel.app/
+Link to working application: https://aviasales-9m4to5lpq-uniquetsunades-projects.vercel.app/

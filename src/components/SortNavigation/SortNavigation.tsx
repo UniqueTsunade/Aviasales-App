@@ -6,7 +6,7 @@ import { changeOption } from "../../redux/sort/slice";
 import { RadioButton } from "./RadioButton";
 import sortOptions from "../../data/sortOptions";
 import { RootState } from "../../redux/store";
-import { AppDispatch } from '../../redux/store';
+import { AppDispatch } from "../../redux/store";
 
 const SortNavigation = () => {
   const option = useSelector((state: RootState) => state.sortSlice.option);

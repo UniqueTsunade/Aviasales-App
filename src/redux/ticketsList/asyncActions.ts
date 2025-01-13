@@ -1,6 +1,6 @@
 import { createAsyncThunk, SerializedError } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Ticket } from "../ticketsList/types";
+import { Ticket } from "./types";
 import { RootState } from "../store";
 import { serializedError } from "../../utils/fetchError";
 

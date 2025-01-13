@@ -10,26 +10,18 @@ import Skeleton from "./Skeleton";
 import useFetchInitialData from "../../hooks/useFetchInitialData";
 import useFetchTicketsData from "../../hooks/useFetchTicketsData";
 
-
 const TiketsList = () => {
-
-  const { tickets, error, isLoad } = useSelector((state: RootState) => state.ticketsSlice);
+  const { tickets, error, isLoad } = useSelector(
+    (state: RootState) => state.ticketsSlice
+  );
 
   useFetchInitialData();
   useFetchTicketsData();
 
-
-
-
-  const skeleton = [...new Array(5)].map((_, i) => <Skeleton key={i} /> );
+  const skeleton = [...new Array(5)].map((_, i) => <Skeleton key={i} />);
   const ticket = tickets.map(({ id, price, segments, carrier }) => (
-    <Ticket
-      key={id}
-      price={price}
-      segments={segments}
-      carrier={carrier}
-    />
-  ))
+    <Ticket key={id} price={price} segments={segments} carrier={carrier} />
+  ));
 
   return (
     <div>
@@ -37,8 +29,10 @@ const TiketsList = () => {
         <div className={styles.error}>
           Failed to load tickets. <br /> Please try again.
         </div>
+      ) : isLoad ? (
+        skeleton
       ) : (
-        isLoad ? skeleton : ticket
+        ticket
       )}
     </div>
   );

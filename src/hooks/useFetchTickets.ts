@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRef } from "react";
-import { AppDispatch } from "../redux/store";
+import { useAppDispatch } from "../redux/store";
 import { RootState } from "../redux/store";
 
 import { fetchTickets } from "../redux/ticketsList/asyncActions";
 
 const useFetchTickets = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { stop } = useSelector((state: RootState) => state.ticketsSlice);
   const isLoadingRef = useRef(false);
 

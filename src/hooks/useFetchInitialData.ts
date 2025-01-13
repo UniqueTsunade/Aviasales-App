@@ -1,11 +1,10 @@
-import { useDispatch } from "react-redux";
 import { useEffect, useRef, useCallback } from "react";
-import { AppDispatch } from '../redux/store';
+import { useAppDispatch } from '../redux/store';
 
 import { fetchSearchId } from "../redux/ticketsList/asyncActions";
 
 const useFetchInitialData = () => {
-  const dispatch: AppDispatch  = useDispatch();
+  const dispatch = useAppDispatch();
   const hasFetched = useRef(false);
 
   const fetchInitialData = useCallback(async () => {

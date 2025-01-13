@@ -1,12 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
-import { RootState } from "../redux/store";
-import { AppDispatch } from '../redux/store';
+import { RootState, useAppDispatch } from "../redux/store";
 
 import { fetchTickets } from "../redux/ticketsList/asyncActions";
 
 const useFetchTicketsData = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { searchId } = useSelector((state: RootState) => state.ticketsSlice);
   const hasFetchedTickets = useRef(false);
 

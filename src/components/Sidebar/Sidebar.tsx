@@ -2,16 +2,15 @@ import React from "react";
 import styles from "../../styles/components/sidebar.module.scss";
 import filterOptions from "../../data/filterOptions";
 import { CheckboxButton } from "./CheckboxButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { addTransfers, initializeTransfers } from "../../redux/filter/slice";
 import { useEffect } from "react";
 import { setFilters } from "../../redux/ticketsList/slice";
-import { RootState } from "../../redux/store";
-import { AppDispatch } from "../../redux/store";
+import { RootState, useAppDispatch } from "../../redux/store";
 
 const Sidebar = () => {
   const { transfers } = useSelector((state: RootState) => state.filterSlice);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(initializeTransfers(filterOptions));

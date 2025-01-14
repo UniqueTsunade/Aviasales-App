@@ -13,9 +13,14 @@ import TicketsContainer from "../TicketsContainer";
 import useFetchInitialData from "../../hooks/useFetchInitialData";
 import useFetchTicketsData from "../../hooks/useFetchTicketsData";
 import { selectIsLoad } from "../../redux/ticketsList/selectors";
+import { RootState } from "../../redux/store";
 
 const App = () => {
-  const isLoad = useSelector(selectIsLoad);
+  // const isLoad = useSelector(selectIsLoad);
+
+  const isLoad = useSelector((state: RootState) => state.ticketsSlice.isLoad)
+
+  console.log(isLoad)
   useFetchInitialData();
   useFetchTicketsData();
 

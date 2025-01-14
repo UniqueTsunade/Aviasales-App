@@ -9,7 +9,7 @@
   height: 60px;
   margin: 0 auto 45px;
   border-radius: 50%;
-  background: var(loader);
+  background: var(--loader);
   animation: coin-flip 4.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 @keyframes coin-flip {

@@ -96,7 +96,6 @@ export const ticketsSlice = createSlice({
           state,
           action: PayloadAction<{ tickets: Ticket[]; stop: boolean }>
         ) => {
-          console.log("Received data from server:", action.payload);
           state.stop = action.payload.stop;
           state.isLoad = false;
           state.error = null;

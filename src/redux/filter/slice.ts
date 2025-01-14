@@ -9,7 +9,10 @@ export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    initializeTransfers: (state, action: PayloadAction<Omit<Transfers, "checked">[]>) => {
+    initializeTransfers: (
+      state,
+      action: PayloadAction<Omit<Transfers, "checked">[]>
+    ) => {
       state.transfers = action.payload.map(({ value, label }) => ({
         value,
         label,

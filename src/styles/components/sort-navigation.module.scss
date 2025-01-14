@@ -1,72 +1,65 @@
-@import "../abstracts/vars";
 @import "../abstracts/mixins";
 
 .sortForm {
-    width: 502px;
-    height: 50px;
-    margin-bottom: 26px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-content: center;
-    text-align: center;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    border: 1px solid $strokeColor;
-    border-radius: 5px;
-    background-color: $blockBackground;
-    overflow: hidden;
+  width: 502px;
+  height: 50px;
+  margin-bottom: 26px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid var(--strokeColor);
+  border-radius: 5px;
+  background-color: var(--blockBackground);
+  overflow: hidden;
 
-    @include mobile() {
-        width: clamp(19.375rem, 11.771rem + 38.02vw, 31.375rem);
-        height: 70px;
-        margin: 0 auto 20px;
-    }
+  @include mobile() {
+    width: clamp(19.375rem, 11.771rem + 38.02vw, 31.375rem);
+    height: 70px;
+    margin: 0 auto 20px;
+  }
 }
 
-
 .sortOptionContainer {
-    position: relative;
+  position: relative;
 
-    &:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        border-right: 1px solid $strokeColor;
-    }
+  &:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    border-right: 1px solid var(--strokeColor);
+  }
 
-    &:has(.sortOption:checked):not(:last-child)::after {
-        display: none;
-    }
+  &:has(.sortOption:checked):not(:last-child)::after {
+    display: none;
+  }
 }
 
 .sortOption {
-    display: none;
+  display: none;
 }
-
 
 .sortOption:checked + .sortOptionTitle {
-    background-color: $activeBtns; 
-    color: $lightTextColor;
+  background-color: var(--activeBtns);
+  color: var(--lightTextColor);
 }
-
-
 
 .sortOptionTitle {
-    display: flex;
-    padding: 15px;
-    align-items: center;
-    justify-content: center;
-    width: 100%; 
-    height: 100%; 
-    cursor: pointer; 
-    transition: color 0.6ms ease-in-out, background-color 0.6ms ease-in-out;
-    user-select: none;
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transition: color 0.6ms ease-in-out, background-color 0.6ms ease-in-out;
+  user-select: none;
 
-    @include mobile() {
-        padding: 10px;
-    }
+  @include mobile() {
+    padding: 10px;
+  }
 }
-
-

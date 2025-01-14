@@ -12,7 +12,6 @@ const Footer = memo(() => {
   const startSlice = useSelector(selectStartSlice);
   const loadedTickets = useSelector(selectLoadedTickets);
 
-  console.log("Footer перерисовался");
   const dispatch = useAppDispatch();
 
   const handleShowMore = () => {

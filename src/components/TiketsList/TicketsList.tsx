@@ -8,7 +8,7 @@ import Skeleton from "./Skeleton";
 import {
   selectError,
   selectIsFirstLoad,
-  selectDisplayedTickets 
+  selectDisplayedTickets,
 } from "../../redux/ticketsList/selectors";
 
 const TicketsList = memo(() => {

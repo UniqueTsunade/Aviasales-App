@@ -1,0 +1,121 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:regular,600);
+
+:root {
+    /* Colors */
+    --antiFlashWhite: #F3F7FA;
+    --dodgerBlue: #2196F3;
+    --white: #FFFFFF;
+    --azure: #F1FCFF;
+    --aliceBlue: #DFE5EC;
+    --davysGray: #4A4A4A;
+    --cadetGray: #A0B0B9;
+    --powderBlue: #9ABBCE;
+
+    /* Background */
+    --bodyBackground: var(--antiFlashWhite);
+    --blockBackground: var(--white);
+
+    /* UI element colors */
+    --activeBtns: var(--dodgerBlue);
+    --inactiveBtns: var(--white);
+    --hoverEffect: var(--azure);
+    --strokeColor: var(--aliceBlue);
+    --checkboxBorder: var(--powderBlue);
+    --loader: var(--dodgerBlue);
+
+    /* Text color */
+    --textColor: var(--davysGray);
+    --priceColor: var(--dodgerBlue);
+    --mutedTextColor: var(--cadetGray);
+    --lightTextColor: var(--white);
+}
+
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 600;
+    color: var(textColor);
+    background-color: var(bodyBackground);
+    overflow-x: hidden;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+
+/* Box sizing rules */
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul,
+ol {
+    list-style: none;
+}
+
+
+/* Set core root defaults */
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Make images easier to work with */
+img,
+picture,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+input {
+    outline: none;
+}

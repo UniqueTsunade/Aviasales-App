@@ -1,24 +1,19 @@
-
-@import "../abstracts/vars";
-
 .info {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin-bottom: 10px;
-    column-gap: 20px;
-    justify-content: space-between;
-    justify-content: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 10px;
+  column-gap: 20px;
+  justify-content: space-between;
+  justify-content: stretch;
 }
 
-
 .title {
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: $mutedTextСolor;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--mutedTextColor);
 }
 
 .description {
-    font-size: 14px;
-    line-height: 21px;
- 
+  font-size: 14px;
+  line-height: 21px;
 }

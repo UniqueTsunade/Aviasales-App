@@ -1,31 +1,30 @@
-@import "../abstracts/vars";
-
 .loader {
-    display: block;
-    transform: translateZ(1px);
+  display: block;
+  transform: translateZ(1px);
+}
+.loader:after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 45px;
+  border-radius: 50%;
+  background: var(loader);
+  animation: coin-flip 4.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+@keyframes coin-flip {
+  0%,
+  100% {
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
   }
-  .loader:after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 45px;
-    border-radius: 50%;
-    background: $loader;
-    animation: coin-flip 4.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  0% {
+    transform: rotateY(0deg);
   }
-  @keyframes coin-flip {
-    0%, 100% {
-      animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
-    }
-    0% {
-      transform: rotateY(0deg);
-    }
-    50% {
-      transform: rotateY(1800deg);
-      animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
-    }
-    100% {
-      transform: rotateY(3600deg);
-    }
+  50% {
+    transform: rotateY(1800deg);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
   }
+  100% {
+    transform: rotateY(3600deg);
+  }
+}

@@ -1,5 +1,5 @@
 import { Ticket } from "../redux/ticketsList/types";
-import { SegmentsType as SortTicketsSegmentType} from "../redux/ticketsList/types";
+import { SegmentsType as SortTicketsSegmentType } from "../redux/ticketsList/types";
 
 const calculateTotalTime = (segments: SortTicketsSegmentType[]) => {
   return segments.reduce((sum, seg) => sum + seg.duration, 0);
@@ -13,7 +13,7 @@ const getFastestTicket = (tickets: Ticket[]) => {
   return [...tickets].sort((a, b) => {
     const totalTimeA = calculateTotalTime(a.segments);
     const totalTimeB = calculateTotalTime(b.segments);
-    
+
     // If the total time is the same, sort by the number of transfers
     const stopsA = a.segments.length - 1; // Number of transfers
     const stopsB = b.segments.length - 1;
@@ -27,10 +27,9 @@ const getFastestTicket = (tickets: Ticket[]) => {
   });
 };
 
-
 const getOptimalTickets = (tickets: Ticket[]) => {
   // Create an array with tickets and their price/time ratio
-  const ticketsWithRatios = tickets.map(ticket => {
+  const ticketsWithRatios = tickets.map((ticket) => {
     const totalTime = calculateTotalTime(ticket.segments);
     const ratio = ticket.price / totalTime; // Calculating the price/time ratio
     return { ...ticket, ratio }; // Returning a new object with the added relation

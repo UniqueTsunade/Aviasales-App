@@ -1,7 +1,7 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { filterTickets } from '../../utils/filterTickets';
-import { sortTickets } from '../../utils/sortTickets';
+import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import { filterTickets } from "../../utils/filterTickets";
+import { sortTickets } from "../../utils/sortTickets";
 
 const selectTicketsSlice = (state: RootState) => state.ticketsSlice;
 
@@ -35,8 +35,6 @@ export const selectLoadedTickets = createSelector(
   (ticketsSlice) => ticketsSlice.loadedTickets
 );
 
-
-
 export const selectActiveFilters = createSelector(
   [selectTicketsSlice],
   (ticketsSlice) => ticketsSlice.activeFilters
@@ -47,12 +45,10 @@ export const selectActiveSort = createSelector(
   (ticketsSlice) => ticketsSlice.activeSort
 );
 
-
 export const selectFilteredTickets = createSelector(
   [selectLoadedTickets, selectActiveFilters],
   (loadedTickets, activeFilters) => filterTickets(activeFilters, loadedTickets)
 );
-
 
 export const selectSortedFilteredTickets = createSelector(
   [selectFilteredTickets, selectActiveSort],
@@ -60,8 +56,8 @@ export const selectSortedFilteredTickets = createSelector(
     activeSort ? sortTickets(filteredTickets, activeSort) : filteredTickets
 );
 
-
 export const selectDisplayedTickets = createSelector(
   [selectSortedFilteredTickets, selectStartSlice],
-  (sortedFilteredTickets, startSlice) => sortedFilteredTickets.slice(0, startSlice)
+  (sortedFilteredTickets, startSlice) =>
+    sortedFilteredTickets.slice(0, startSlice)
 );

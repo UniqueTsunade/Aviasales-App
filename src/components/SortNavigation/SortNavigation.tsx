@@ -8,13 +8,12 @@ import sortOptions from "../../data/sortOptions";
 import { useAppDispatch } from "../../redux/store";
 import { selectOption } from "../../redux/sort/selectors";
 
-
 const SortNavigation = memo(() => {
   const option = useSelector(selectOption);
 
   const dispatch = useAppDispatch();
 
-  const handleOptionChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeOption(e.target.value));
   };
 
@@ -28,7 +27,7 @@ const SortNavigation = memo(() => {
             value={value}
             label={label}
             checked={option === value}
-            handleOptionChange ={handleOptionChange}
+            handleOptionChange={handleOptionChange}
           />
         ))}
       </form>

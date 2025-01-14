@@ -10,9 +10,9 @@ export interface TicketsSliceState {
   activeFilters: Array<string>;
   filteredTicketsLoaded: boolean;
   isLoad: boolean;
-  loadedCount: number,
-  isFirstLoad: boolean,
-  hasFetchedInitialData: boolean,
+  loadedCount: number;
+  isFirstLoad: boolean;
+  hasFetchedInitialData: boolean;
 }
 
 export enum Status {
@@ -35,4 +35,4 @@ export type SegmentsType = {
   date: string;
   stops: string[];
   duration: number;
-}
+};

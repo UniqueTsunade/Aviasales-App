@@ -9,9 +9,8 @@ const useFetchTicketsData = () => {
   const { searchId } = useSelector((state: RootState) => state.ticketsSlice);
 
   useEffect(() => {
-    if (!searchId) return; // Не вызывать, если searchId отсутствует
-
-    console.log("searchId changed:", searchId);
+    if (!searchId) return; 
+    
     const fetchTicketsData = async () => {
       try {
         await dispatch(fetchTickets()).unwrap();

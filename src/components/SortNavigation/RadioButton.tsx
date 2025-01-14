@@ -7,7 +7,7 @@ type RadioButtonProps = {
   value: string;
   id: string;
   label: string;
-  selectOption: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOptionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
 };
 
@@ -15,14 +15,14 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
   value,
   id,
   label,
-  selectOption,
+  handleOptionChange,
   checked,
 }) => {
   const dispatch = useAppDispatch();
 
   const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setActiveSort(e.target.value));
-    selectOption(e);
+    handleOptionChange(e);
   };
 
   return (

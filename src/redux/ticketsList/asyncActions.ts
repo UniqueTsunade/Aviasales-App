@@ -3,7 +3,7 @@ import axios from "axios";
 import { Ticket } from "./types";
 import { RootState } from "../store";
 import { serializedError } from "../../utils/fetchError";
-
+import { ticketsSlice } from "./slice";
 export const fetchSearchId = createAsyncThunk<
   string,
   void,
@@ -16,8 +16,6 @@ export const fetchSearchId = createAsyncThunk<
     const { searchId } = response.data;
     return searchId;
   } catch (error: unknown) {
-    console.error("Error fetching searchId:", error);
-
     const fetchSearchIdError = serializedError(error);
 
     // Returning an error using rejectWithValue
@@ -28,24 +26,53 @@ export const fetchSearchId = createAsyncThunk<
 export const fetchTickets = createAsyncThunk<
   { tickets: Ticket[]; stop: boolean },
   void,
-  { rejectValue: SerializedError;  state: RootState }
->("tickets/fetchTicketsByIdStatus", async (_, { rejectWithValue, getState }) => {
-  const { searchId } = getState().ticketsSlice;
-  
-  try {
-    const response = await axios.get(
-      `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Network response was not ok");
-    }
-    const { tickets, stop } = response.data;
-    return { tickets, stop };
-  } catch (error: unknown) {
-    console.error("Error fetching tickets:", error);
+  { rejectValue: SerializedError; state: RootState }
+>(
+  "tickets/fetchTicketsByIdStatus",
+  async (_, { rejectWithValue, getState, dispatch }) => {
+    const { searchId } = getState().ticketsSlice;
+    let stop = false;
+    let retryCount = 0;
+    const maxRetries = 10;
 
-    const fetchTicketsError = serializedError(error);
-    
-    return rejectWithValue(fetchTicketsError);
+    while (!stop && retryCount < maxRetries) {
+      try {
+        const response = await axios.get(
+          `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+
+        const { tickets, stop: serverStop } = response.data;
+        stop = serverStop;
+
+        dispatch(ticketsSlice.actions.addTickets(tickets));
+
+        if (!stop) {
+          continue;
+        }
+
+        return { tickets, stop };
+      } catch (error: unknown) {
+        const fetchSearchIdError = serializedError(error);
+        retryCount++;
+
+        if (retryCount >= maxRetries) {
+          return rejectWithValue(fetchSearchIdError);
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+
+    return rejectWithValue({
+      name: "FetchError",
+      message: "Fetch stopped due to errors",
+      stack: "",
+      code: "",
+    });
   }
-});
+);
+

@@ -10,6 +10,9 @@ export interface TicketsSliceState {
   activeFilters: Array<string>;
   filteredTicketsLoaded: boolean;
   isLoad: boolean;
+  loadedCount: number,
+  isFirstLoad: boolean,
+  hasFetchedInitialData: boolean,
 }
 
 export enum Status {

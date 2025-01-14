@@ -1,18 +1,20 @@
-import React from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import styles from "../../styles/components/sort-navigation.module.scss";
 
 import { changeOption } from "../../redux/sort/slice";
 import { RadioButton } from "./RadioButton";
 import sortOptions from "../../data/sortOptions";
-import { RootState, useAppDispatch } from "../../redux/store";
+import { useAppDispatch } from "../../redux/store";
+import { selectOption } from "../../redux/sort/selectors";
 
 
-const SortNavigation = () => {
-  const option = useSelector((state: RootState) => state.sortSlice.option);
+const SortNavigation = memo(() => {
+  const option = useSelector(selectOption);
+
   const dispatch = useAppDispatch();
 
-  const selectOption = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOptionChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeOption(e.target.value));
   };
 
@@ -26,12 +28,12 @@ const SortNavigation = () => {
             value={value}
             label={label}
             checked={option === value}
-            selectOption={selectOption}
+            handleOptionChange ={handleOptionChange}
           />
         ))}
       </form>
     </div>
   );
-};
+});
 
 export default SortNavigation;

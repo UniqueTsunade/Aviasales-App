@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { RootState, useAppDispatch } from "../redux/store";
 
 import { fetchTickets } from "../redux/ticketsList/asyncActions";
@@ -7,9 +7,11 @@ import { fetchTickets } from "../redux/ticketsList/asyncActions";
 const useFetchTicketsData = () => {
   const dispatch = useAppDispatch();
   const { searchId } = useSelector((state: RootState) => state.ticketsSlice);
-  const hasFetchedTickets = useRef(false);
 
   useEffect(() => {
+    if (!searchId) return; // Не вызывать, если searchId отсутствует
+
+    console.log("searchId changed:", searchId);
     const fetchTicketsData = async () => {
       try {
         await dispatch(fetchTickets()).unwrap();
@@ -18,10 +20,7 @@ const useFetchTicketsData = () => {
       }
     };
 
-    if (searchId && !hasFetchedTickets.current) {
-      fetchTicketsData();
-      hasFetchedTickets.current = true;
-    }
+    fetchTicketsData();
   }, [searchId, dispatch]);
 };
 

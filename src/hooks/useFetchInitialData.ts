@@ -1,27 +1,29 @@
-import { useEffect, useRef, useCallback } from "react";
-import { useAppDispatch } from '../redux/store';
+import { useEffect, useCallback } from "react";
+import { RootState, useAppDispatch } from "../redux/store";
 
 import { fetchSearchId } from "../redux/ticketsList/asyncActions";
+import { useSelector } from "react-redux";
+import { setHasFetchedInitialData } from "../redux/ticketsList/slice";
 
 const useFetchInitialData = () => {
   const dispatch = useAppDispatch();
-  const hasFetched = useRef(false);
+  const hasFetchedInitialData = useSelector(
+    (state: RootState) => state.ticketsSlice.hasFetchedInitialData
+  );
 
   const fetchInitialData = useCallback(async () => {
     try {
       await dispatch(fetchSearchId()).unwrap();
+      dispatch(setHasFetchedInitialData(true));
     } catch (error) {
       console.error("Failed to fetch initial data:", error);
     }
   }, [dispatch]);
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
+    if (hasFetchedInitialData) return;
     fetchInitialData();
-  }, [dispatch, fetchInitialData]);
+  }, [fetchInitialData, hasFetchedInitialData]);
 };
-
 
 export default useFetchInitialData;

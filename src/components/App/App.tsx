@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 import styles from "../../styles/components/app.module.scss";
 
@@ -8,23 +7,24 @@ import logo from "../../assets/logo.png";
 import up from "../../assets/up.png";
 
 import SortNavigation from "../SortNavigation";
-import TiketsList from "../TiketsList"
-import Footer from "../Footer";
 import Sidebar from "../Sidebar";
-import NotFound from "../NotFound";
 import Loader from "../Loader";
+import TicketsContainer from "../TicketsContainer";
+import useFetchInitialData from "../../hooks/useFetchInitialData";
+import useFetchTicketsData from "../../hooks/useFetchTicketsData";
+import { selectIsLoad } from "../../redux/ticketsList/selectors";
 
 const App = () => {
-  
-  const activeFilters = useSelector((state: RootState) => state.ticketsSlice.activeFilters);
-  const isLoad = useSelector((state: RootState) => state.ticketsSlice.isLoad);
+  const isLoad = useSelector(selectIsLoad);
+  useFetchInitialData();
+  useFetchTicketsData();
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' 
+      behavior: "smooth",
     });
-  };
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -39,19 +39,12 @@ const App = () => {
         <Sidebar />
         <div>
           <SortNavigation />
-          {activeFilters.length === 0 ? (
-            <NotFound />
-          ) : (
-            <>
-              <TiketsList />
-              <Footer />
-            </>
-          )}
+          <TicketsContainer />
         </div>
       </div>
-    
+
       <button className={styles.scrollToTop} onClick={scrollToTop}>
-        <img src={up} alt="Scroll to top"/>
+        <img src={up} alt="Scroll to top" />
       </button>
     </div>
   );

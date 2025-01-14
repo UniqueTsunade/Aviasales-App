@@ -1,12 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
 import { fetchSearchId, fetchTickets } from "./asyncActions";
 import { v4 as uuidv4 } from "uuid";
 
-import { updateDisplayedTickets } from "../../utils/updateDisplayedTickets";
 import { TicketsSliceState, Status, Ticket } from "./types";
 
+type FetchSearchIdRejectedAction = {
+  error: SerializedError;
+  payload?: SerializedError;
+};
 
-const initialState:TicketsSliceState = {
+const initialState: TicketsSliceState = {
   searchId: "",
   status: Status.IDLE,
   tickets: [],
@@ -17,37 +20,50 @@ const initialState:TicketsSliceState = {
   activeSort: null,
   activeFilters: [],
   filteredTicketsLoaded: false,
-  isLoad: false, 
+  isLoad: false,
+  loadedCount: 0,
+  isFirstLoad: true,
+  hasFetchedInitialData: false,
 };
 
 export const ticketsSlice = createSlice({
   name: "tickets",
   initialState,
   reducers: {
-    showMoreTickets: (state) => {
-      if (state.stop) return;
+    setHasFetchedInitialData: (state, action: PayloadAction<boolean>) => {
+      state.hasFetchedInitialData = action.payload;
+    },
+    addTickets: (state, action: PayloadAction<Ticket[]>) => {
+      const ticketsWithId = action.payload.map((ticket) => ({
+        ...ticket,
+        id: uuidv4(), // Generating a unique ID for each ticket
+      }));
 
-      // Increase the index for the next portion
+      state.loadedTickets.push(...ticketsWithId);
+      state.loadedCount += action.payload.length;
+
+      // If this is the first download, display the first 5 tickets
+      if (state.isFirstLoad) {
+        state.tickets = state.loadedTickets.slice(0, 5);
+        state.isFirstLoad = false;
+      }
+    },
+    showMoreTickets: (state) => {
       const nextStartSlice = state.startSlice + 5;
 
-      // If the index does not exceed the total number of tickets, update the state
       if (nextStartSlice <= state.loadedTickets.length) {
         state.startSlice = nextStartSlice;
-        updateDisplayedTickets(state);
-      }
-      if (nextStartSlice > state.tickets.length) {
-        state.filteredTicketsLoaded = true;
       } else {
-        state.filteredTicketsLoaded = false;
+        state.startSlice = state.loadedTickets.length;
       }
     },
-    setActiveSort: (state, action) => {
+    setActiveSort: (state, action: PayloadAction<string | null>) => {
       state.activeSort = action.payload;
-      updateDisplayedTickets(state);
+      state.startSlice = 5;
     },
-    setFilters: (state, action) => {
+    setFilters: (state, action: PayloadAction<Array<string>>) => {
       state.activeFilters = action.payload;
-      updateDisplayedTickets(state);
+      state.startSlice = 5;
     },
   },
   extraReducers: (builder) => {
@@ -55,48 +71,55 @@ export const ticketsSlice = createSlice({
       .addCase(fetchSearchId.pending, (state) => {
         state.status = Status.LOADING;
       })
-      .addCase(fetchSearchId.fulfilled, (state, action: PayloadAction<string>) => {
-        state.searchId = action.payload;
-        state.status = Status.SUCCESS;
-      })
-      .addCase(fetchSearchId.rejected, (state, action) => {
-        state.status = Status.ERROR;
-        state.error = action.error.message ? action.error.message : null;
-      })
+      .addCase(
+        fetchSearchId.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.searchId = action.payload;
+          state.status = Status.SUCCESS;
+        }
+      )
+      .addCase(
+        fetchSearchId.rejected,
+        (state, action: FetchSearchIdRejectedAction) => {
+          state.status = Status.ERROR;
+          state.error = action.payload?.message || "Unknown error";
+        }
+      )
       .addCase(fetchTickets.pending, (state) => {
         state.status = Status.LOADING;
         state.isLoad = true;
         state.error = null;
       })
-      .addCase(fetchTickets.fulfilled, (state, action: PayloadAction<{tickets: Ticket[], stop: boolean}>) => {
-        const ticketsWithId = action.payload.tickets.map((ticket) => ({
-          ...ticket,
-          id: uuidv4(), // Generating a unique ID for each ticket
-        }));
-
-        state.loadedTickets.push(...ticketsWithId);
-
-        if (state.activeSort || state.activeFilters.length > 0) {
-          updateDisplayedTickets(state);
-        } else {
-          // If sorting is not active, just take the first 5
-          if (state.tickets.length === 0) {
-            state.tickets = state.loadedTickets.slice(0, 5);
-          }
+      .addCase(
+        fetchTickets.fulfilled,
+        (
+          state,
+          action: PayloadAction<{ tickets: Ticket[]; stop: boolean }>
+        ) => {
+          console.log("Received data from server:", action.payload);
+          state.stop = action.payload.stop;
+          state.isLoad = false;
+          state.error = null;
+          state.status = Status.SUCCESS;
         }
-        state.stop = action.payload.stop;
-        state.isLoad = false;
-        state.status = Status.SUCCESS;
-      })
-      .addCase(fetchTickets.rejected, (state, action) => {
-        state.status = Status.ERROR;
-        state.error = 'Failed to load tickets.';
-        state.isLoad = false; // Reset isLoad
-        console.error('Error fetching Tickets:', action.error);
-      });
+      )
+      .addCase(
+        fetchTickets.rejected,
+        (state, action: FetchSearchIdRejectedAction) => {
+          state.status = Status.ERROR;
+          state.error = action.payload?.message || "Unknown error";
+          state.isLoad = false;
+        }
+      );
   },
 });
 
-export const { showMoreTickets, setActiveSort, setFilters } = ticketsSlice.actions;
+export const {
+  addTickets,
+  setHasFetchedInitialData,
+  showMoreTickets,
+  setActiveSort,
+  setFilters,
+} = ticketsSlice.actions;
 
 export default ticketsSlice.reducer;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styles from "../../styles/components/sidebar.module.scss";
 import filterOptions from "../../data/filterOptions";
 import { CheckboxButton } from "./CheckboxButton";
@@ -6,10 +6,11 @@ import { useSelector } from "react-redux";
 import { addTransfers, initializeTransfers } from "../../redux/filter/slice";
 import { useEffect } from "react";
 import { setFilters } from "../../redux/ticketsList/slice";
-import { RootState, useAppDispatch } from "../../redux/store";
+import { useAppDispatch } from "../../redux/store";
+import { selectTransfers } from "../../redux/filter/selectors";
 
-const Sidebar = () => {
-  const { transfers } = useSelector((state: RootState) => state.filterSlice);
+const Sidebar = memo(() => {
+  const transfers = useSelector(selectTransfers);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -47,6 +48,6 @@ const Sidebar = () => {
       </form>
     </div>
   );
-};
+});
 
 export default Sidebar;
